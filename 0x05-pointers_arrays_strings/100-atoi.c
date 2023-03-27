@@ -1,64 +1,46 @@
 #include "main.h"
-/**
- * _pow - To find the power of a number raised to another
- * @a: base
- * @b: power
- *
- * Return: returns the answer
- */
-
-int _pow(int a, int b)
-{
-	int i, sol = 1;
-
-	i = b - 1;
-	while (i != 0)
-	{
-		sol = sol * a;
-		i--;
-	}
-	return (sol);
-}
 
 /**
- * _atoi - a function that convert a string to an integer.
- * @s: character pointer variable
+ * _atoi - converts a string to an integer
+ * @s: string to be converted
  *
- * Return: the integer
+ * Return: the int converted from the string
  */
-
 int _atoi(char *s)
 {
-	unsigned int i, sign, j, num, conv, sum;
+	int i, d, n, len, f, digit;
 
-	j = 0;
-	sign = 1;
-	for (i = 0; s[i] != '\0'; i++)
+	i = 0;
+	d = 0;
+	n = 0;
+	len = 0;
+	f = 0;
+	digit = 0;
+
+	while (s[len] != '\0')
+		len++;
+
+	while (i < len && f == 0)
 	{
 		if (s[i] == '-')
+			++d;
+
+		if (s[i] >= '0' && s[i] <= '9')
 		{
-			sign *= -1;
+			digit = s[i] - '0';
+			if (d % 2)
+				digit = -digit;
+			n = n * 10 + digit;
+			f = 1;
+			if (s[i + 1] < '0' || s[i + 1] > '9')
+				break;
+			f = 0;
 		}
-
-		if (s[i] >= 48 && s[i] <= 57)
-			j++;
-
-		if (j > 0 && (*(s + i) < 48 || *(s + i) > 57))
-			break;
+		i++;
 	}
 
+	if (f == 0)
+		return (0);
 
-	sum = 0;
-	for (i = 0; s[i] != '\0'; i++)
-	{
-		if (s[i] >= 48 && s[i] <= 57)
-		{
-			conv = (int)s[i] - 48;
-
-			num = conv * _pow(10, j);
-			sum += num;
-			j--;
-		}
-	}
-	return (sum * sign);
+	return (n);
 }
