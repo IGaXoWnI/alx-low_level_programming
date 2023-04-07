@@ -1,2 +1,3 @@
-#!/bin/bash
-ar rc liball.a *.c
+#!/bin/sh -e
+gcc -c *.c
+ar cr libwork.a *.o
