@@ -1,3 +1,4 @@
-#!/bin/sh -e
-gcc -c *.c
-ar cr libwork.a *.o
+#!/bin/bash
+gcc -Wall -pedantic -Werror -Wextra -c *.c
+ar -rc libwork.a *.o
+ranlib libwork.a
