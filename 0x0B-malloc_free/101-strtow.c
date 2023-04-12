@@ -1,64 +1,55 @@
-#include "holberton.h"
+#include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
- * strtow - concatenates all the arguments of your program
- *@str: string
- *@av: arguments
- * Return: a pointer to a new string
+ * strtow - splits a string into words
+ * @str: string to split
+ *
+ * Return: pointer to array of words, or NULL if failure
  */
+ 
+int count_words(char *);
+int word_len(char *);
+void free_words(char **, int);
+ 
 char **strtow(char *str)
 {
-	int i, w, j, k, count, m, wordf;
-	char **p;
-	char *x;
+	char **words;
+	int x, y, z, len, word_count;
 
-	w = 0;
-	j = 0;
-	i = 0;
-	count = 0;
-	if (*str == '\0' || str == NULL)
-		return (NULL);
-	for (i = 0; str[i] != '\0'; i++)
+	if (str == NULL || *str == '\0')
+	return (NULL);
+
+	word_count = count_words(str);
+	if (word_count == 0)
+	return (NULL);
+
+	words = malloc((word_count + 1) * sizeof(char *));
+	if (words == NULL)
+	return (NULL);
+
+	x = 0;
+	while (*str != '\0' && x < word_count)
 	{
-		if (str[i] == ' ' && (str[i + 1] != ' ' || str[i + 1] == '\0'))
-			w++;
-	}
-	p = (char **)malloc((w + 1) * sizeof(char *));
-	if (p == NULL)
-		return (NULL);
-	for (wordf = 0; str[wordf] && j <= w; wordf++)
-	{
-		count = 0;
-		if (str[wordf] != ' ')
+		while (*str == ' ')
+		str++;
+		len = word_len(str);
+		words[x] = malloc((len + 1) * sizeof(char));
+		if (words[x] == NULL)
 		{
-			for (i = wordf ; str[i] != '\0'; i++)
-			{
-				if (str[i] == ' ')
-					break;
-				count++;
-			}
-			*(p + j) = (char *)malloc((count + 1) * sizeof(char));
-			if (*(p + j) == NULL)
-			{
-				for (k = 0; k <= j; k++)
-				{
-					x = p[k];
-					free(x);
-				}
-				free(p);
-				return (NULL);
-			}
-			for (m = 0; wordf < i; wordf++)
-			{
-				p[j][m] = str[wordf];
-				m++;
-			}
-			p[j][m] = '\0';
-			j++;
+			free_words(words, x);
+			return (NULL);
 		}
+		for (y = 0, z = 0; z < len; y++, z++)
+		{
+			while (str[y] == ' ')
+			y++;
+			words[x][z] = str[y];
+		}
+		words[x][z] = '\0';
+		x++;
+		str += len;
 	}
-	p[j] = NULL;
-	return (p);
+	words[x] = NULL;
+	return (words);
 }
